@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from . import models
 from .database import engine
-from .routers import livros, categorias, autores, leitores
+from .routers import livros, categorias, autores, leitores, emprestimos
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -15,6 +15,7 @@ app.include_router(livros.router)
 app.include_router(categorias.router)
 app.include_router(autores.router)
 app.include_router(leitores.router)
+app.include_router(emprestimos.router)
 
 @app.get("/")
 def read_root():
