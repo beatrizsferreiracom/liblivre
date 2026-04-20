@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 36px;
+  max-width: calc(100vw - var(--sidebar-width));
+}
