@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from './Sidebar.module.css';
+import logo from '../../assets/liblivre_logo.svg';
 
 const NAV_ITEMS = [
   { to: '/catalogo',      label: 'Catálogo',      icon: '📚' },
@@ -19,9 +20,8 @@ export function Sidebar() {
 
   return (
     <aside className={styles.sidebar}>
-      <div className={styles.brand}>
-        <span className={styles.brandIcon}>📖</span>
-        <span className={styles.brandName}>LibLivre</span>
+      <div className={styles.logo}>
+        <img src={logo} alt="LibLivre" className={styles.logoIcon} />
       </div>
 
       <nav className={styles.nav}>

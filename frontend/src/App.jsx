@@ -1,121 +1,97 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-function App() {
-  const [count, setCount] = useState(0)
+import './styles/globals.css'
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+// Layout
+import AppLayout from './components/layout/AppLayout';
 
-      <div className="ticks"></div>
+// Autenticação
+import Login from './pages/autenticacao/Login';
+import RecuperarSenha from './pages/autenticacao/recuperar_senha';
+import VerificarCodigo from './pages/autenticacao/verificar_codigo';
+import NovaSenha from './pages/autenticacao/nova_senha';
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+// Catálogo
+import Catalogo from './pages/catalogo/catalogo';
+import DetalhesLivro from './pages/catalogo/detalhes_livro';
+import CadastrarLivro from './pages/catalogo/cadastrar_livro';
+import EditarLivro from './pages/catalogo/editar_livro';
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+// Leitores
+import Leitores from './pages/leitores/leitores';
+import DetalhesLeitor from './pages/leitores/detalhes_leitor';
+import CadastrarLeitor from './pages/leitores/cadastrar_leitor';
+import EditarLeitor from './pages/leitores/editar_leitor';
+
+// Empréstimos
+import Emprestimos from './pages/emprestimos/emprestimos';
+import RegistrarEmprestimo from './pages/emprestimos/registrar_emprestimo';
+import RegistrarDevolucao from './pages/emprestimos/registrar_emprestimo';
+
+// Autores & Categorias
+import Autores from './pages/autores/autores';
+import Categorias from './pages/categorias/categorias';
+
+// Perfil
+import Perfil from './pages/perfil/perfil';
+
+// ─── Guarda de Rota Privada ─────────────────────────────────
+function RequireAuth({ children }) {
+  const token = localStorage.getItem('token');
+  if (!token) return <Navigate to="/login" replace />;
+  return children;
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        {/* ── Autenticação (público) ─────────────────────────────── */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/recuperar_senha" element={<RecuperarSenha />} />
+        <Route path="/recuperar_senha/codigo" element={<VerificarCodigo />} />
+        <Route path="/recuperar_senha/nova_senha" element={<NovaSenha />} />
+
+        {/* ── App (protegido) ───────────────────────────── */}
+        <Route
+          element={
+            <RequireAuth>
+              <AppLayout />
+            </RequireAuth>
+          }
+        >
+          {/* Raiz de redirecionamento → catálogo */}
+          <Route index element={<Navigate to="/catalogo" replace />} />
+
+          {/* Catálogo */}
+          <Route path="/catalogo" element={<Catalogo />} />
+          <Route path="/catalogo/adicionar" element={<CadastrarLivro />} />
+          <Route path="/catalogo/:id" element={<DetalhesLivro />} />
+          <Route path="/catalogo/:id/editar" element={<EditarLivro />} />
+
+          {/* Leitores */}
+          <Route path="/leitores" element={<Leitores />} />
+          <Route path="/leitores/adicionar" element={<CadastrarLeitor />} />
+          <Route path="/leitores/:id" element={<DetalhesLeitor />} />
+          <Route path="/leitores/:id/editar" element={<EditarLeitor />} />
+
+          {/* Empréstimos */}
+          <Route path="/emprestimos" element={<Emprestimos />} />
+          <Route path="/emprestimos/registrar" element={<RegistrarEmprestimo />} />
+          <Route path="/emprestimos/:id/devolver" element={<RegistrarDevolucao />} />
+
+          {/* Autores & Categorias */}
+          <Route path="/autores" element={<Autores />} />
+          <Route path="/categorias" element={<Categorias />} />
+
+          {/* Perfil */}
+          <Route path="/perfil" element={<Perfil />} />
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/catalogo" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}

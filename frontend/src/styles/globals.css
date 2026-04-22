@@ -1,7 +1,3 @@
-/* src/styles/globals.css */
-
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap');
-
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -9,7 +5,7 @@
 }
 
 :root {
-  --font-display: 'Lora', Georgia, serif;
+  --font-display: 'Verdana', Georgia, serif;
   --font-body: 'DM Sans', sans-serif;
 
   --color-bg: #F7F4EE;
@@ -18,11 +14,11 @@
   --color-border: #DDD9CE;
   --color-border-strong: #C4BFB0;
 
-  --color-primary: #3D6B4F;
-  --color-primary-hover: #2F5440;
+  --color-primary: #724747;
+  --color-primary-hover: #312c2b;
   --color-primary-light: #E8F2EB;
 
-  --color-text: #1E1C18;
+  --color-text: #312c2b;
   --color-text-muted: #6B6759;
   --color-text-light: #9B9589;
 
