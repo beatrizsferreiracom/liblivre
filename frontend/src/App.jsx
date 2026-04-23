@@ -14,13 +14,13 @@ import NovaSenha from './pages/autenticacao/nova_senha';
 // Catálogo
 import Catalogo from './pages/catalogo/catalogo';
 import DetalhesLivro from './pages/catalogo/detalhes_livro';
-import CadastrarLivro from './pages/catalogo/cadastrar_livro';
+import AdicionarLivro from './pages/catalogo/adicionar_livro';
 import EditarLivro from './pages/catalogo/editar_livro';
 
 // Leitores
 import Leitores from './pages/leitores/leitores';
 import DetalhesLeitor from './pages/leitores/detalhes_leitor';
-import CadastrarLeitor from './pages/leitores/cadastrar_leitor';
+import AdicionarLeitor from './pages/leitores/adicionar_leitor';
 import EditarLeitor from './pages/leitores/editar_leitor';
 
 // Empréstimos
@@ -66,13 +66,13 @@ export default function App() {
 
           {/* Catálogo */}
           <Route path="/catalogo" element={<Catalogo />} />
-          <Route path="/catalogo/adicionar" element={<CadastrarLivro />} />
+          <Route path="/catalogo/adicionar" element={<AdicionarLivro />} />
           <Route path="/catalogo/:id" element={<DetalhesLivro />} />
           <Route path="/catalogo/:id/editar" element={<EditarLivro />} />
 
           {/* Leitores */}
           <Route path="/leitores" element={<Leitores />} />
-          <Route path="/leitores/adicionar" element={<CadastrarLeitor />} />
+          <Route path="/leitores/adicionar" element={<AdicionarLeitor />} />
           <Route path="/leitores/:id" element={<DetalhesLeitor />} />
           <Route path="/leitores/:id/editar" element={<EditarLeitor />} />
 

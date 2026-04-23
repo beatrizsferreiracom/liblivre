@@ -49,7 +49,6 @@ export function Categorias() {
 
   const columns = [
     { key: 'nome', label: 'Nome' },
-    { key: 'total_livros', label: 'Livros nesta categoria', width: 180 },
     {
       key: 'acoes', label: '', width: 80,
       render: (_, row) => (

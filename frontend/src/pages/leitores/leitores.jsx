@@ -46,19 +46,11 @@ export function Leitores() {
 
   const columns = [
     { key: 'nome', label: 'Nome' },
-    { key: 'email', label: 'E-mail' },
-    { key: 'turma', label: 'Turma' },
     {
       key: 'ativo',
       label: 'Status',
       width: 100,
       render: (v) => <Badge variant={v ? 'success' : 'default'}>{v ? 'Ativo' : 'Inativo'}</Badge>,
-    },
-    {
-      key: 'emprestimos_ativos',
-      label: 'Empréstimos',
-      width: 100,
-      render: (v) => v ?? 0,
     },
     {
       key: 'acoes',

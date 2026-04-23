@@ -10,7 +10,7 @@ const EMPTY = {
   editora: '', isbn: '', quantidade: '', descricao: '',
 };
 
-export function CadastrarLivro() {
+export function AdicionarLivro() {
   const navigate = useNavigate();
   const [form, setForm] = useState(EMPTY);
   const [errors, setErrors] = useState({});
@@ -95,4 +95,4 @@ export function CadastrarLivro() {
   );
 }
 
-export default CadastrarLivro;
+export default AdicionarLivro;

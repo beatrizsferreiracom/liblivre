@@ -5,7 +5,7 @@
 }
 
 .label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-text-muted);
   text-transform: uppercase;
@@ -16,7 +16,7 @@
   width: 100%;
   padding: 9px 12px;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-text);
   background: var(--color-surface);
   border: 1px solid var(--color-border);

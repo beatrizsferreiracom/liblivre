@@ -49,7 +49,6 @@ export function Autores() {
 
   const columns = [
     { key: 'nome', label: 'Nome' },
-    { key: 'total_livros', label: 'Livros cadastrados', width: 150 },
     {
       key: 'acoes', label: '', width: 80,
       render: (_, row) => (

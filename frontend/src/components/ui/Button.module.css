@@ -18,8 +18,8 @@
 }
 
 /* Sizes */
-.sm { padding: 5px 12px; font-size: 12px; }
-.md { padding: 8px 18px; font-size: 13px; }
+.sm { padding: 5px 12px; font-size: 14px; }
+.md { padding: 10px 20px; font-size: 14px; }
 .lg { padding: 11px 24px; font-size: 14px; }
 
 /* Variants */
