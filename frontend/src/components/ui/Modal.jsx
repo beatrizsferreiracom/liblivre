@@ -38,7 +38,6 @@ export function Modal({
   );
 }
 
-/** Confirm delete modal */
 export function ConfirmModal({ isOpen, onClose, onConfirm, title, message, loading }) {
   return (
     <Modal

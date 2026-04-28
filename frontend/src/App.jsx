@@ -19,9 +19,6 @@ import EditarLivro from './pages/catalogo/editar_livro';
 
 // Leitores
 import Leitores from './pages/leitores/leitores';
-import DetalhesLeitor from './pages/leitores/detalhes_leitor';
-import AdicionarLeitor from './pages/leitores/adicionar_leitor';
-import EditarLeitor from './pages/leitores/editar_leitor';
 
 // Empréstimos
 import Emprestimos from './pages/emprestimos/emprestimos';
@@ -35,7 +32,7 @@ import Categorias from './pages/categorias/categorias';
 // Perfil
 import Perfil from './pages/perfil/perfil';
 
-// ─── Guarda de Rota Privada ─────────────────────────────────
+// Guarda de Rota Privada
 function RequireAuth({ children }) {
   const token = localStorage.getItem('token');
   if (!token) return <Navigate to="/login" replace />;
@@ -47,13 +44,13 @@ export default function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* ── Autenticação (público) ─────────────────────────────── */}
+        {/* Autenticação (público) */}
         <Route path="/login" element={<Login />} />
         <Route path="/recuperar_senha" element={<RecuperarSenha />} />
         <Route path="/recuperar_senha/codigo" element={<VerificarCodigo />} />
         <Route path="/recuperar_senha/nova_senha" element={<NovaSenha />} />
 
-        {/* ── App (protegido) ───────────────────────────── */}
+        {/* App (protegido) */}
         <Route
           element={
             <RequireAuth>
@@ -72,9 +69,6 @@ export default function App() {
 
           {/* Leitores */}
           <Route path="/leitores" element={<Leitores />} />
-          <Route path="/leitores/adicionar" element={<AdicionarLeitor />} />
-          <Route path="/leitores/:id" element={<DetalhesLeitor />} />
-          <Route path="/leitores/:id/editar" element={<EditarLeitor />} />
 
           {/* Empréstimos */}
           <Route path="/emprestimos" element={<Emprestimos />} />

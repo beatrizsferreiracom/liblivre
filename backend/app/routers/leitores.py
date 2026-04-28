@@ -38,8 +38,18 @@ def criar_leitor(leitor: schemas.LeitorCreate, db: Session = Depends(get_db)):
     return novo_leitor
 
 @router.get("/", response_model=List[schemas.LeitorResponse])
-def listar_leitores(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return db.query(models.Leitor).filter(models.Leitor.is_ativo == True).offset(skip).limit(limit).all()
+def listar_leitores(ativo: bool = True, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return db.query(models.Leitor).filter(models.Leitor.is_ativo == ativo).offset(skip).limit(limit).all()
+
+@router.get("/{leitor_id}", response_model=schemas.LeitorResponse)
+def buscar_leitor(leitor_id: int, db: Session = Depends(get_db)):
+
+    leitor = db.query(models.Leitor).filter(models.Leitor.id == leitor_id).first()
+    
+    if not leitor:
+        raise HTTPException(status_code=404, detail="Leitor não encontrado.")
+        
+    return leitor
 
 @router.patch("/{leitor_id}/desativar", status_code=status.HTTP_204_NO_CONTENT)
 def desativar_leitor(leitor_id: int, db: Session = Depends(get_db)):
@@ -53,12 +63,30 @@ def desativar_leitor(leitor_id: int, db: Session = Depends(get_db)):
     
     return
 
+@router.patch("/{leitor_id}/ativar", status_code=status.HTTP_204_NO_CONTENT)
+def ativar_leitor(leitor_id: int, db: Session = Depends(get_db)):
+    
+    leitor = db.query(models.Leitor).filter(models.Leitor.id == leitor_id).first()
+    if not leitor:
+        raise HTTPException(status_code=404, detail="Leitor não encontrado.")
+    
+    leitor.is_ativo = True
+    db.commit()
+    
+    return
+
 @router.put("/{leitor_id}", response_model=schemas.LeitorResponse)
 def editar_leitor(leitor_id: int, leitor_atualizado: schemas.LeitorCreate, db: Session = Depends(get_db)):
     leitor = db.query(models.Leitor).filter(models.Leitor.id == leitor_id).first()
     
     if not leitor:
         raise HTTPException(status_code=404, detail="Leitor não encontrado.")
+    
+    if not leitor.is_ativo:
+        raise HTTPException(
+            status_code=400, 
+            detail="Não é possível editar informações de um leitor inativo."
+        )
 
     hoje = date.today()
     nascimento = leitor_atualizado.data_nascimento

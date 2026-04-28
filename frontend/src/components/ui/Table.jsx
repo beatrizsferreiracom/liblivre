@@ -1,6 +1,6 @@
 import styles from './Table.module.css';
 
-export function Table({ columns, data, loading, emptyMessage = 'Nenhum registro encontrado.' }) {
+export function Table({ columns, data, loading, emptyMessage = 'Nenhum registro encontrado.', onRowClick }) {
   if (loading) {
     return (
       <div className={styles.skeleton}>
@@ -30,7 +30,7 @@ export function Table({ columns, data, loading, emptyMessage = 'Nenhum registro 
             </tr>
           ) : (
             data.map((row, i) => (
-              <tr key={row.id ?? i} className={styles.tr}>
+              <tr key={row.id ?? i} className={styles.tr} onClick={() => onRowClick && onRowClick(row)}>
                 {columns.map((col) => (
                   <td key={col.key} className={styles.td}>
                     {col.render ? col.render(row[col.key], row) : row[col.key]}
