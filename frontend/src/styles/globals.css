@@ -9,16 +9,16 @@
   --font-body: 'DM Sans', sans-serif;
 
   --color-bg: #F7F4EE;
-  --color-surface: #FFFFFF;
+  --color-surface: #FFFEFB;
   --color-surface-alt: #F0EDE5;
   --color-border: #DDD9CE;
   --color-border-strong: #C4BFB0;
 
   --color-primary: #724747;
-  --color-primary-hover: #312c2b;
-  --color-primary-light: #E8F2EB;
+  --color-primary-hover: #331f1f;
+  --color-primary-light: #F0EDE5;
 
-  --color-text: #312c2b;
+  --color-text: #331f1f;
   --color-text-muted: #6B6759;
   --color-text-light: #9B9589;
 

@@ -25,7 +25,7 @@ def criar_livro(livro: schemas.LivroCreate, db: Session = Depends(get_db)):
     novo_livro = models.Livro(**livro.model_dump())
 
     db.add(novo_livro)
-    db.commit
+    db.commit()
     db.refresh(novo_livro)
 
     return novo_livro
@@ -36,6 +36,16 @@ def listar_livros(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     livros = db.query(models.Livro).filter(models.Livro.is_ativo == True).offset(skip).limit(limit).all()
 
     return livros
+
+@router.get("/{livro_id}", response_model=schemas.LivroResponse)
+def buscar_livro(livro_id: int, db: Session = Depends(get_db)):
+
+    livro = db.query(models.Livro).filter(models.Livro.id == livro_id).first()
+    
+    if not livro:
+        raise HTTPException(status_code=404, detail="Livro não encontrado.")
+        
+    return livro
 
 @router.put("/{livro_id}", response_model=schemas.LivroResponse)
 def editar_livro(livro_id: int, livro_atualizado: schemas.LivroCreate, db: Session = Depends(get_db)):

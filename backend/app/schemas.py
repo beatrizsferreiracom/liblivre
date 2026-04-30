@@ -30,6 +30,8 @@ class LivroBase(BaseModel):
     titulo: str
     autor_id: int
     categoria_id: int
+    descricao: Optional[str] = None
+    ano: Optional[int] = None
     quantidade_total: int = Field(..., ge=0, description="A quantidade total deve ser maior ou igual a zero")
     capa_url: Optional[str] = None
 

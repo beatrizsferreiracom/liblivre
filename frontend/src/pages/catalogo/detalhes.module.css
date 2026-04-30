@@ -1,0 +1,64 @@
+.detalhesSuperior {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 40px;
+  align-items: flex-start;
+}
+
+.capaWrapper {
+  flex-shrink: 0;
+}
+
+.capaImg, .capaSemFoto {
+  width: 220px;
+  height: 300px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  box-shadow: var(--shadow-md);
+}
+
+.capaSemFoto {
+  background: var(--color-surface-alt);
+  border: 1px dashed var(--color-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+}
+
+.destaqueWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.livroTitulo {
+  font-size: 32px;
+  font-weight: 200;
+  color: var(--color-text);
+  margin-top: 15px;
+}
+
+.descricaoTexto {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text-main);
+  margin-top: 8px;
+}
+
+.detalhesFooter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 100px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border);
+  align-items: center;
+}
+
+.footerItem {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+}

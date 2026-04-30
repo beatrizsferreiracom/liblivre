@@ -24,8 +24,15 @@
 }
 
 .tr { transition: background var(--transition); }
-.tr:hover { background: var(--color-surface-alt); }
 .tr:not(:last-child) { border-bottom: 1px solid var(--color-border); }
+
+.tr.clickable:hover { 
+  background: var(--color-bg); 
+}
+
+.clickable {
+  cursor: pointer;
+}
 
 .td {
   padding: 11px 14px;
@@ -40,7 +47,6 @@
   font-size: 13px;
 }
 
-/* Loading skeleton */
 .skeleton { display: flex; flex-direction: column; gap: 2px; }
 .skeletonRow {
   height: 44px;

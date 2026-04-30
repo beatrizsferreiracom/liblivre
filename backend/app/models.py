@@ -38,6 +38,8 @@ class Livro(Base):
     titulo = Column(String(200), nullable=False)
     autor_id = Column(Integer, ForeignKey("autores.id", ondelete="RESTRICT"))
     categoria_id = Column(Integer, ForeignKey("categorias.id", ondelete="RESTRICT"))
+    descricao = Column(Text, nullable=True)
+    ano = Column(Integer, nullable=True)
     quantidade_total = Column(Integer, nullable=False)
     quantidade_emprestada = Column(Integer, default=0)
     capa_url = Column(Text, nullable=True)

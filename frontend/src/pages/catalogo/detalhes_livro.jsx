@@ -5,100 +5,116 @@ import Badge from '../../components/ui/Badge';
 import { ConfirmModal } from '../../components/ui/Modal';
 import { booksApi } from '../../services/api';
 import pg from '../../styles/page.module.css';
+import styles from './detalhes.module.css';
+
+import EditarLivro from './components/editar_livro';
+import RegistrarEmprestimo from './components/registrar_emprestimo';
 
 export function DetalhesLivro() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [editOpen, setEditOpen] = useState(false);
+  const [loanOpen, setLoanOpen] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    booksApi.getById(id)
-      .then((r) => setBook(r.data))
-      .finally(() => setLoading(false));
-  }, [id]);
+  useEffect(() => { fetchBook(); }, [id]);
+
+  async function fetchBook() {
+    setLoading(true);
+    try {
+      const res = await booksApi.getById(id);
+      setBook(res.data);
+    } finally { setLoading(false); }
+  }
 
   async function handleDelete() {
     setDeleting(true);
     try {
       await booksApi.delete(id);
       navigate('/catalogo');
-    } finally {
-      setDeleting(false);
-    }
+    } finally { setDeleting(false); }
   }
 
   if (loading) return <div style={{ padding: 32, color: 'var(--color-text-muted)' }}>Carregando...</div>;
   if (!book) return <div style={{ padding: 32, color: 'var(--color-danger)' }}>Livro não encontrado.</div>;
+
+  const qtdDisponivel = (book.quantidade_total || 0) - (book.quantidade_emprestada || 0);
+  const isDisponivel = qtdDisponivel > 0;
+  const podeExcluir = (book.quantidade_emprestada || 0) === 0;
 
   return (
     <div className={pg.page}>
       <div className={pg.pageHeader}>
         <div>
           <button className={pg.backBtn} onClick={() => navigate('/catalogo')}>← Catálogo</button>
-          <h1 className={pg.pageTitle}>{book.titulo}</h1>
+          <h1 className={pg.pageTitle}>Detalhes do Livro</h1>
         </div>
         <div className={pg.toolbar}>
-          <Button variant="secondary" onClick={() => navigate(`/emprestimos/registrar?livro_id=${book.id}`)}>
-            Registrar Empréstimo
-          </Button>
-          <Button variant="secondary" onClick={() => navigate(`/catalogo/${id}/editar`)}>Editar</Button>
-          <Button variant="danger" onClick={() => setShowDelete(true)}>Excluir</Button>
+          <Button variant="primary" onClick={() => setLoanOpen(true)} disabled={!isDisponivel}>Registrar Empréstimo</Button>
+          <Button variant="secondary" onClick={() => setEditOpen(true)}>Editar</Button>
+          {podeExcluir && (
+            <Button variant="danger" onClick={() => setShowDelete(true)}>Excluir</Button>
+          )}
         </div>
       </div>
-
       <div className={pg.card}>
-        <div className={pg.detailGrid}>
-          <div className={pg.detailItem}>
-            <span className={pg.detailLabel}>Autor</span>
-            <span className={pg.detailValue}>{book.autor || '—'}</span>
+        <div className={styles.detalhesSuperior}>
+          {/* Capa */}
+          <div className={styles.capaWrapper}>
+            {book.capa_url ? (
+              <img src={book.capa_url} alt={book.titulo} className={styles.capaImg} />
+            ) : (
+              <div className={styles.capaSemFoto}>Sem capa</div>
+            )}
           </div>
-          <div className={pg.detailItem}>
-            <span className={pg.detailLabel}>Categoria</span>
-            <span className={pg.detailValue}>{book.categoria || '—'}</span>
+          <div className={styles.destaqueWrapper}>
+            <h2 className={styles.livroTitulo}>{book.titulo}</h2>
+            <div className={pg.detailItem}>
+              <span className={pg.detailLabel}>Autor</span>
+              <span className={pg.detailValue}>{book.autor?.nome || '—'}</span>
+            </div>
+            <div className={styles.descricaoContainer}>
+              <span className={pg.detailLabel}>Descrição</span>
+              <p className={styles.descricaoTexto}>{book.descricao || 'Nenhuma descrição disponível.'}</p>
+            </div>
           </div>
-          <div className={pg.detailItem}>
-            <span className={pg.detailLabel}>Ano</span>
+        </div>
+        <div className={styles.detalhesFooter}>
+          <div className={styles.footerItem}>
+            <span className={pg.detailLabel}>Ano:</span>
             <span className={pg.detailValue}>{book.ano || '—'}</span>
           </div>
-          <div className={pg.detailItem}>
-            <span className={pg.detailLabel}>Editora</span>
-            <span className={pg.detailValue}>{book.editora || '—'}</span>
+          
+          <div className={styles.footerItem}>
+            <span className={pg.detailLabel}>Categoria:</span>
+            <span className={pg.detailValue}>{book.categoria?.nome || '—'}</span>
           </div>
-          <div className={pg.detailItem}>
-            <span className={pg.detailLabel}>ISBN</span>
-            <span className={pg.detailValue}>{book.isbn || '—'}</span>
+          <div className={styles.footerItem}>
+            <span className={pg.detailLabel}>Disponível:</span>
+            <span className={pg.detailValue}>{qtdDisponivel}</span>
           </div>
-          <div className={pg.detailItem}>
-            <span className={pg.detailLabel}>Quantidade Total</span>
-            <span className={pg.detailValue}>{book.quantidade ?? '—'}</span>
-          </div>
-          <div className={pg.detailItem}>
-            <span className={pg.detailLabel}>Disponíveis</span>
-            <span className={pg.detailValue}>{book.disponiveis ?? '—'}</span>
-          </div>
-          <div className={pg.detailItem}>
-            <span className={pg.detailLabel}>Situação</span>
-            <Badge variant={book.disponivel ? 'success' : 'danger'}>
-              {book.disponivel ? 'Disponível' : 'Indisponível'}
+          <div className={styles.footerItem}>
+            <Badge variant={isDisponivel ? 'success' : 'danger'}>
+              {isDisponivel ? 'Disponível' : 'Indisponível'}
             </Badge>
           </div>
         </div>
-
-        {book.descricao && (
-          <>
-            <hr style={{ margin: '20px 0', borderColor: 'var(--color-border)' }} />
-            <div>
-              <span className={pg.detailLabel}>Descrição</span>
-              <p style={{ marginTop: 6, fontSize: 14, lineHeight: 1.6, color: 'var(--color-text)' }}>
-                {book.descricao}
-              </p>
-            </div>
-          </>
-        )}
       </div>
+
+      <EditarLivro
+        book={editOpen ? book : null}
+        onClose={() => setEditOpen(false)}
+        onSuccess={fetchBook}
+      />
+
+      <RegistrarEmprestimo
+        book={loanOpen ? book : null}
+        onClose={() => setLoanOpen(false)}
+        onSuccess={fetchBook}
+      />
 
       <ConfirmModal
         isOpen={showDelete}
@@ -106,7 +122,7 @@ export function DetalhesLivro() {
         onConfirm={handleDelete}
         loading={deleting}
         title="Excluir Livro"
-        message={`Tem certeza que deseja excluir "${book.titulo}"?`}
+        message={`Tem certeza que deseja excluir "${book.titulo}"? Esta ação não pode ser desfeita.`}
       />
     </div>
   );

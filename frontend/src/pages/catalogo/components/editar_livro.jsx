@@ -1,0 +1,198 @@
+import { useState, useEffect } from 'react';
+import { Modal } from '../../../components/ui/Modal';
+import Button from '../../../components/ui/Button';
+import Input, { Select, Textarea } from '../../../components/ui/Input';
+import { booksApi, authorsApi, categoriesApi } from '../../../services/api';
+import pg from '../../../styles/page.module.css';
+
+const EMPTY_FORM = {
+  titulo: '', autor_id: '', categoria_id: '', ano: '',
+  quantidade_total: '', descricao: '', capa_url: '',
+};
+
+export function EditarLivro({ book, onClose, onSuccess }) {
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
+  const [authors, setAuthors] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    authorsApi.getAll().then((r) => setAuthors(r.data)).catch(() => {});
+    categoriesApi.getAll().then((r) => setCategories(r.data)).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (book) {
+      setForm({
+        titulo: book.titulo || '',
+        autor_id: book.autor_id || '',
+        categoria_id: book.categoria_id || '',
+        ano: book.ano || '',
+        quantidade_total: book.quantidade_total || '',
+        descricao: book.descricao || '',
+        capa_url: book.capa_url || '',
+      });
+      setErrors({});
+    }
+  }, [book]);
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm((f) => ({ ...f, [name]: value }));
+    setErrors((er) => ({ ...er, [name]: '' }));
+  }
+
+  function validate() {
+    const errs = {};
+    if (!form.titulo.trim()) errs.titulo = 'Obrigatório';
+    if (!form.autor_id) errs.autor_id = 'Selecione um autor';
+    if (!form.categoria_id) errs.categoria_id = 'Selecione uma categoria';
+    if (!form.quantidade_total) errs.quantidade_total = 'Informe a quantidade';
+    return errs;
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+    
+    setSaving(true);
+    try {
+      const payload = {
+        ...form,
+        autor_id: parseInt(form.autor_id),
+        categoria_id: parseInt(form.categoria_id),
+        ano: form.ano ? parseInt(form.ano) : null,
+        quantidade_total: parseInt(form.quantidade_total),
+      };
+      await booksApi.update(book.id, payload);
+      onClose();
+      onSuccess();
+    } catch (err) {
+      const errorData = err.response?.data?.detail;
+      let errorMessage = 'Erro ao atualizar.';
+      
+      if (Array.isArray(errorData)) {
+        errorMessage = `${errorData[0].loc[1]}: ${errorData[0].msg}`;
+      } else if (typeof errorData === 'string') {
+        errorMessage = errorData;
+      }
+      setErrors({ geral: errorMessage });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <Modal
+      isOpen={!!book}
+      onClose={onClose}
+      title="Editar Livro"
+      size="lg"
+      footer={
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+          <Button variant="secondary" onClick={onClose}>Cancelar</Button>
+          <Button onClick={handleSubmit} loading={saving}>Salvar</Button>
+        </div>
+      }
+    >
+      {errors.geral && <ErrorAlert msg={errors.geral} />}
+
+      <form onSubmit={handleSubmit}>
+        <div className={pg.modalFlexContainer}>
+          <div className={pg.formColumnLeft}>
+            <Input
+              label="Título"
+              name="titulo"
+              value={form.titulo}
+              onChange={handleChange}
+              error={errors.titulo}
+            />
+
+            <div className={pg.inputWithAction}>
+              <Select
+                label="Autor(a)"
+                name="autor_id"
+                value={form.autor_id}
+                onChange={handleChange}
+                error={errors.autor_id}
+              >
+                <option value="">Selecione...</option>
+                {authors.map((a) => (
+                  <option key={a.id} value={a.id}>{a.nome}</option>
+                ))}
+              </Select>
+            </div>
+
+            <div className={pg.inputWithAction}>
+              <Select
+                label="Categoria"
+                name="categoria_id"
+                value={form.categoria_id}
+                onChange={handleChange}
+                error={errors.categoria_id}
+              >
+                <option value="">Selecione...</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>{c.nome}</option>
+                ))}
+              </Select>
+            </div>
+          </div>
+
+          <div className={pg.formColumnRight}>
+            <div className={pg.imageUploadPlaceholder}>
+              <span>+</span>
+            </div>
+          </div>
+        </div>
+
+        <div className={pg.textareaContainer}>
+          <Textarea
+            label="Descrição"
+            name="descricao"
+            value={form.descricao}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className={pg.formFooterRow}>
+          <div className={pg.bottomInputs}>
+            <Input
+              label="Ano"
+              name="ano"
+              type="number"
+              value={form.ano}
+              onChange={handleChange}
+            />
+            <Input
+              label="Quantidade"
+              name="quantidade_total"
+              type="number"
+              value={form.quantidade_total}
+              onChange={handleChange}
+              error={errors.quantidade_total}
+            />
+          </div>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+
+function ErrorAlert({ msg }) {
+  if (!msg) return null;
+  return (
+    <div style={{
+      marginBottom: 16, padding: '10px 14px',
+      background: 'var(--color-danger-light)', color: 'var(--color-danger)',
+      borderRadius: 'var(--radius-sm)', fontSize: 13,
+      border: '1px solid var(--color-danger)',
+    }}>
+      {String(msg)}
+    </div>
+  );
+}
+
+export default EditarLivro;

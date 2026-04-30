@@ -14,8 +14,6 @@ import NovaSenha from './pages/autenticacao/nova_senha';
 // Catálogo
 import Catalogo from './pages/catalogo/catalogo';
 import DetalhesLivro from './pages/catalogo/detalhes_livro';
-import AdicionarLivro from './pages/catalogo/adicionar_livro';
-import EditarLivro from './pages/catalogo/editar_livro';
 
 // Leitores
 import Leitores from './pages/leitores/leitores';
@@ -63,9 +61,7 @@ export default function App() {
 
           {/* Catálogo */}
           <Route path="/catalogo" element={<Catalogo />} />
-          <Route path="/catalogo/adicionar" element={<AdicionarLivro />} />
           <Route path="/catalogo/:id" element={<DetalhesLivro />} />
-          <Route path="/catalogo/:id/editar" element={<EditarLivro />} />
 
           {/* Leitores */}
           <Route path="/leitores" element={<Leitores />} />

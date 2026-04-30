@@ -79,8 +79,9 @@
 .backBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 8px;
   color: var(--color-text-muted);
   background: none;
   border: none;
@@ -100,7 +101,7 @@
 .detailItem { display: flex; flex-direction: column; gap: 4px; }
 
 .detailLabel {
-  font-size: 11px;
+  font-size: 16px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -108,7 +109,7 @@
 }
 
 .detailValue {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-text);
 }
 
@@ -131,3 +132,71 @@
 
 .iconBtn:hover { background: var(--color-surface-alt); color: var(--color-text); }
 .iconBtnDanger:hover { background: var(--color-danger-light); color: var(--color-danger); }
+
+.modalFlexContainer {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.formColumnLeft {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.formColumnRight {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imageUploadPlaceholder {
+  width: 150px;
+  height: 200px;
+  border: 2px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-light);
+  font-size: 28px;
+  transition: background var(--transition), border-color var(--transition);
+  background: var(--color-surface-alt);
+  margin-top: 22px;
+}
+
+.imageUploadPlaceholder:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.inputWithAction {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.inputWithAction > *:first-child { flex: 1; }
+
+.textareaContainer {
+  margin-bottom: 16px;
+}
+
+.formFooterRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bottomInputs {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.bottomInputs > * { flex: 1; }

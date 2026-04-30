@@ -30,7 +30,9 @@ export function Table({ columns, data, loading, emptyMessage = 'Nenhum registro 
             </tr>
           ) : (
             data.map((row, i) => (
-              <tr key={row.id ?? i} className={styles.tr} onClick={() => onRowClick && onRowClick(row)}>
+              <tr key={row.id ?? i} 
+                  className={`${styles.tr} ${onRowClick ? styles.clickable : ''}`}
+                  onClick={() => onRowClick?.(row)}>
                 {columns.map((col) => (
                   <td key={col.key} className={styles.td}>
                     {col.render ? col.render(row[col.key], row) : row[col.key]}
