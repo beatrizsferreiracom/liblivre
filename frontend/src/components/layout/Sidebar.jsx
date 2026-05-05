@@ -5,9 +5,9 @@ import logo from '../../assets/liblivre_logo.svg';
 const NAV_ITEMS = [
   { to: '/catalogo',      label: 'Catálogo',      icon: '📚' },
   { to: '/leitores',      label: 'Leitores',      icon: '👤' },
-  { to: '/emprestimos',   label: 'Empréstimos',   icon: '🔄' },
   { to: '/autores',       label: 'Autores',        icon: '✏️' },
   { to: '/categorias',    label: 'Categorias',     icon: '🏷️' },
+  { to: '/emprestimos',   label: 'Empréstimos',   icon: '🔄' },
 ];
 
 export function Sidebar() {

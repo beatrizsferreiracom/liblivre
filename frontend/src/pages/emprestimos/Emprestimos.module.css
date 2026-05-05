@@ -1,18 +1,59 @@
+.tabsRow {
+  display: flex;
+  align-items: center;
+}
+
 .tabs {
   display: flex;
-  gap: 4px;
+  align-items: center;
+  gap: 6px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: 4px;
-  width: fit-content;
+  padding: 5px 6px;
 }
 
+/* Checkbox estilizado como tag */
+.checkTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition), color var(--transition);
+}
+
+.checkTab input[type="checkbox"] {
+  display: none;
+}
+
+.checkTab:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+}
+
+.checkTabActive.checkTabSuccess {
+  background: var(--color-success-light);
+  color: var(--color-success);
+  font-weight: 500;
+}
+
+.checkTabActive.checkTabDanger {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+/* Botão aba Devolvidos */
 .tab {
-  padding: 7px 18px;
+  padding: 5px 14px;
   font-family: var(--font-body);
   font-size: 13px;
-  font-weight: 400;
   color: var(--color-text-muted);
   background: none;
   border: none;
@@ -21,8 +62,36 @@
   transition: background var(--transition), color var(--transition);
 }
 
-.tab:hover { background: var(--color-surface-alt); color: var(--color-text); }
+.tab:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+}
 
-.activeTab[data-variant="success"] { background: var(--color-success-light); color: var(--color-success); font-weight: 500; }
-.activeTab[data-variant="danger"]  { background: var(--color-danger-light);  color: var(--color-danger);  font-weight: 500; }
-.activeTab[data-variant="default"] { background: var(--color-surface-alt);   color: var(--color-text);    font-weight: 500; }
+.tabDevolvidos {
+  background: var(--color-info-light);
+  color: var(--color-info);
+  font-weight: 500;
+}
+
+.modalFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.warningText {
+  font-size: 12px;
+  color: var(--color-danger);
+  text-align: center;
+}
+
+.footerBtns {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btnReady {
+  background: var(--color-success) !important;
+  border-color: var(--color-success) !important;
+}

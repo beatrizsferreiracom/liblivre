@@ -20,8 +20,6 @@ import Leitores from './pages/leitores/leitores';
 
 // Empréstimos
 import Emprestimos from './pages/emprestimos/emprestimos';
-import RegistrarEmprestimo from './pages/emprestimos/registrar_emprestimo';
-import RegistrarDevolucao from './pages/emprestimos/registrar_emprestimo';
 
 // Autores & Categorias
 import Autores from './pages/autores/autores';
@@ -68,8 +66,6 @@ export default function App() {
 
           {/* Empréstimos */}
           <Route path="/emprestimos" element={<Emprestimos />} />
-          <Route path="/emprestimos/registrar" element={<RegistrarEmprestimo />} />
-          <Route path="/emprestimos/:id/devolver" element={<RegistrarDevolucao />} />
 
           {/* Autores & Categorias */}
           <Route path="/autores" element={<Autores />} />

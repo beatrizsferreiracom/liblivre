@@ -16,6 +16,8 @@ router = APIRouter(
 @router.post("/", response_model=schemas.EmprestimoResponse, status_code=status.HTTP_201_CREATED)
 def registrar_emprestimo(emprestimo: schemas.EmprestimoCreate, db: Session = Depends(get_db)):
     
+    data_selecionada = emprestimo.data_emprestimo
+
     hoje = date.today()
 
     leitor = db.query(models.Leitor).filter(models.Leitor.id == emprestimo.leitor_id).first()
@@ -39,12 +41,12 @@ def registrar_emprestimo(emprestimo: schemas.EmprestimoCreate, db: Session = Dep
     if livro.quantidade_emprestada >= livro.quantidade_total:
         raise HTTPException(status_code=400, detail="Livro indisponível no momento. Todas as cópias estão emprestadas.")
     
-    data_prevista = calcular_data_devolucao(hoje)
+    data_prevista = calcular_data_devolucao(data_selecionada)
 
     novo_emprestimo = models.Emprestimo(
         livro_id=livro.id,
         leitor_id=leitor.id,
-        data_emprestimo=hoje,
+        data_emprestimo=data_selecionada,
         data_devolucao_prevista=data_prevista,
         status="No Prazo"
     )

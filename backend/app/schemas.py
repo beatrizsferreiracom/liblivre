@@ -66,19 +66,34 @@ class LeitorResponse(LeitorBase):
     
     model_config = ConfigDict(from_attributes=True)
 
+class LivroSimpleResponse(BaseModel):
+    id: int
+    titulo: str
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class LeitorSimpleResponse(BaseModel):
+    id: int
+    nome: str
+    
+    model_config = ConfigDict(from_attributes=True)
+
 #Empréstimo
 class EmprestimoBase(BaseModel):
     livro_id: int
     leitor_id: int
-    data_devolucao_prevista: date
+    data_emprestimo: date
 
 class EmprestimoCreate(EmprestimoBase):
     pass
 
 class EmprestimoResponse(EmprestimoBase):
     id: int
-    data_emprestimo: date
+    data_devolucao_prevista: date
     data_devolucao_real: Optional[date] = None
     status: str
+
+    livro: Optional[LivroSimpleResponse] = None
+    leitor: Optional[LeitorSimpleResponse] = None
     
     model_config = ConfigDict(from_attributes=True)

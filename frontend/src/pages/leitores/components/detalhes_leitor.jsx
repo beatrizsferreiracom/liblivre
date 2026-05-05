@@ -3,6 +3,12 @@ import { Modal } from '../../../components/ui/Modal';
 import Button from '../../../components/ui/Button';
 import Badge from '../../../components/ui/Badge';
 
+const formatarData = (dataStr) => {
+  if (!dataStr) return '—';
+  const [year, month, day] = dataStr.split('-');
+  return `${day}/${month}/${year}`;
+};
+
 function DetailRow({ label, value }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -46,12 +52,15 @@ export function DetalhesLeitor({ reader, onClose, onEdit, onDeactivate, onActiva
       {reader && (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           <DetailRow label="Nome" value={reader.nome} />
-          <DetailRow label="Data de Nascimento" value={reader.data_nascimento} />
+          <DetailRow 
+            label="Data de Nascimento" 
+            value={formatarData(reader.data_nascimento)} 
+          />  
           <DetailRow label="Idade" value={idade} />
           <DetailRow label="Telefone" value={reader.telefone} />
           <DetailRow label="Endereço" value={reader.endereco} />
           {reader.nome_resp && <DetailRow label="Nome do Responsável" value={reader.nome_resp} />}
-          {reader.telefone_resp && <DetailRow label="Tel. Responsável" value={reader.telefone_resp} />}
+          {reader.telefone_resp && <DetailRow label="Tel. Responsável" value={reader.telefone_resp} />}   
           <DetailRow
             label="Status"
             value={
