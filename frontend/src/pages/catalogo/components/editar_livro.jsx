@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Modal } from '../../../components/ui/Modal';
 import Button from '../../../components/ui/Button';
 import Input, { Select, Textarea } from '../../../components/ui/Input';
@@ -16,6 +16,8 @@ export function EditarLivro({ book, onClose, onSuccess }) {
   const [saving, setSaving] = useState(false);
   const [authors, setAuthors] = useState([]);
   const [categories, setCategories] = useState([]);
+  const fileInputRef = useRef(null);
+  const [preview, setPreview] = useState(null);
 
   useEffect(() => {
     authorsApi.getAll().then((r) => setAuthors(r.data)).catch(() => {});
@@ -33,9 +35,29 @@ export function EditarLivro({ book, onClose, onSuccess }) {
         descricao: book.descricao || '',
         capa_url: book.capa_url || '',
       });
+      setPreview(book.capa_url || null);
       setErrors({});
     }
   }, [book]);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 500 * 1024) {
+      setErrors({ geral: "A imagem deve ter no máximo 500KB." });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      setPreview(base64String);
+      setForm(f => ({ ...f, capa_url: base64String }));
+      setErrors(er => ({ ...er, geral: '' }));
+    };
+    reader.readAsDataURL(file);
+  };
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -72,7 +94,7 @@ export function EditarLivro({ book, onClose, onSuccess }) {
     } catch (err) {
       const errorData = err.response?.data?.detail;
       let errorMessage = 'Erro ao atualizar.';
-      
+
       if (Array.isArray(errorData)) {
         errorMessage = `${errorData[0].loc[1]}: ${errorData[0].msg}`;
       } else if (typeof errorData === 'string') {
@@ -142,9 +164,36 @@ export function EditarLivro({ book, onClose, onSuccess }) {
           </div>
 
           <div className={pg.formColumnRight}>
-            <div className={pg.imageUploadPlaceholder}>
-              <span>+</span>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/png, image/jpeg"
+              style={{ display: 'none' }}
+            />
+            
+            <div 
+              className={pg.imageUploadPlaceholder} 
+              onClick={() => fileInputRef.current.click()}
+              style={{ 
+                backgroundImage: preview ? `url(${preview})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderStyle: preview ? 'solid' : 'dashed'
+              }}
+            >
+              {!preview && <span>+</span>}
             </div>
+
+            {preview && (
+              <button 
+                type="button"
+                onClick={() => { setPreview(null); setForm(f => ({...f, capa_url: ''})) }}
+                style={{ marginTop: 8, fontSize: 12, color: 'var(--color-danger)', cursor: 'pointer', background: 'none', border: 'none' }}
+              >
+                Remover capa
+              </button>
+            )}
           </div>
         </div>
 

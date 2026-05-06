@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, use } from 'react';
 import { Modal } from '../../../components/ui/Modal';
 import Button from '../../../components/ui/Button';
 import Input, { Select, Textarea } from '../../../components/ui/Input';
@@ -16,6 +16,26 @@ export function AdicionarLivro({ isOpen, onClose, onSuccess }) {
   const [saving, setSaving] = useState(false);
   const [authors, setAuthors] = useState([]);
   const [categories, setCategories] = useState([]);
+  const fileInputRef = useRef(null);
+  const[preview, setPreview] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    if (file.size > 500 * 1024) {
+      setErros({ geral: "A imagem deve ter no máximo 500KB"});
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      setPreview(base64String);
+      setForm(f => ({ ...f, capa_url: base64String }));
+    };
+    reader.readAsDataURL(file);
+  };
 
   useEffect(() => {
     authorsApi.getAll().then((r) => {
@@ -137,9 +157,34 @@ export function AdicionarLivro({ isOpen, onClose, onSuccess }) {
             </div>
           </div>
           <div className={pg.formColumnRight}>
-            <div className={pg.imageUploadPlaceholder}>
-              <span>+</span>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/png, image/jpeg"
+              style={{ display: 'none' }}
+            />
+
+            <div
+              className={pg.imageUploadPlaceholder} 
+              onClick={() => fileInputRef.current.click()}
+              style={{ 
+                backgroundImage: preview ? `url(${preview})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderStyle: preview ? 'solid' : 'dashed'}}
+            >
+              {!preview && <span>+</span>}
             </div>
+            {preview && (
+              <button 
+                type="button"
+                onClick={() => { setPreview(null); setForm(f => ({...f, capa_url: ''})) }}
+                style={{ marginTop: 8, fontSize: 12, color: 'var(--color-danger)', cursor: 'pointer', background: 'none', border: 'none' }}
+              >
+                Remover capa
+              </button>
+            )}
           </div>
         </div>
         <div className={pg.textareaContainer}>
