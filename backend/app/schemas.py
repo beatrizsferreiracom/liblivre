@@ -11,6 +11,8 @@ class CategoriaCreate(CategoriaBase):
 
 class CategoriaResponse(CategoriaBase):
     id: int
+    livros_count: int = 0
+    
     model_config = ConfigDict(from_attributes=True)
 
 #Autor
@@ -22,6 +24,7 @@ class AutorCreate(AutorBase):
 
 class AutorResponse(AutorBase):
     id: int
+    livros_count: int = 0
 
     model_config = ConfigDict(from_attributes=True)
 

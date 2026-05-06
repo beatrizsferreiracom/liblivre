@@ -18,8 +18,15 @@ export function AdicionarLivro({ isOpen, onClose, onSuccess }) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    authorsApi.getAll().then((r) => setAuthors(r.data)).catch(() => {});
-    categoriesApi.getAll().then((r) => setCategories(r.data)).catch(() => {});
+    authorsApi.getAll().then((r) => {
+        const sortedAuthors = r.data.sort((a, b) => a.nome.localeCompare(b.nome));
+        setAuthors(sortedAuthors); })
+      .catch(() => {});
+
+    categoriesApi.getAll().then((r) => {
+        const sortedCategories = r.data.sort((a, b) => a.nome.localeCompare(b.nome));
+        setCategories(sortedCategories); })
+      .catch(() => {});
   }, []);
 
   function handleChange(e) {

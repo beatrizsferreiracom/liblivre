@@ -16,6 +16,7 @@ export function Autores() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [addError, setAddError] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => { fetchAuthors(); }, []);
 
@@ -45,15 +46,42 @@ export function Autores() {
     finally { setDeleting(false); }
   }
 
-  const filtered = authors.filter((a) => a.nome.toLowerCase().includes(search.toLowerCase()));
+  const filteredAndSorted = authors.filter((a) => a.nome.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => {
+      const nomeA = a.nome.toLowerCase();
+      const nomeB = b.nome.toLowerCase();
+
+      if (sortOrder === 'asc') {
+        return nomeA.localeCompare(nomeB);
+      } else {
+        return nomeB.localeCompare(nomeA);
+      }
+  });
 
   const columns = [
-    { key: 'nome', label: 'Nome' },
+    { key: 'nome', 
+      label: (
+        <div 
+          style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px' }}
+          onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+        >
+          NOME
+          <span>{sortOrder === 'asc' ? '⭡' : '⭣'}</span>
+        </div>)
+    },
     {
       key: 'acoes', label: '', width: 80,
-      render: (_, row) => (
-        <button className={`${pg.iconBtn} ${pg.iconBtnDanger}`} onClick={() => setDeleteTarget(row)} title="Excluir">🗑</button>
-      ),
+      render: (_, row) => {      
+        const podeExcluir = (row.livros_count || 0) === 0;
+        return (
+          <button 
+          className={`${pg.iconBtn} ${pg.iconBtnDanger}`} 
+          onClick={() => setDeleteTarget(row)} 
+          title={podeExcluir ? "Excluir" : "Não é possível excluir autores com livros vinculados"}
+          disabled={!podeExcluir}
+          style={{ opacity: podeExcluir ? 1 : 0.3, cursor: podeExcluir ? 'pointer' : 'not-allowed' }}>🗑</button>
+        );
+      },
     },
   ];
 
@@ -71,7 +99,7 @@ export function Autores() {
       </div>
 
       <div className={pg.card} style={{ padding: 0 }}>
-        <Table columns={columns} data={filtered} loading={loading} emptyMessage="Nenhum autor encontrado." />
+        <Table columns={columns} data={filteredAndSorted} loading={loading} emptyMessage="Nenhum autor encontrado." />
       </div>
 
       <Modal
@@ -100,7 +128,7 @@ export function Autores() {
         onConfirm={handleDelete}
         loading={deleting}
         title="Excluir Autor"
-        message={`Deseja excluir o autor "${deleteTarget?.nome}"? Os livros vinculados a ele não serão excluídos.`}
+        message={`Deseja excluir o autor "${deleteTarget?.nome}"?`}
       />
     </div>
   );

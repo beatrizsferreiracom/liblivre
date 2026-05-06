@@ -16,6 +16,7 @@ export function Categorias() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [addError, setAddError] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => { fetchCategories(); }, []);
 
@@ -45,15 +46,41 @@ export function Categorias() {
     finally { setDeleting(false); }
   }
 
-  const filtered = categories.filter((c) => c.nome.toLowerCase().includes(search.toLowerCase()));
+  const filteredAndSorted = categories.filter((c) => c.nome.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => {
+      const nomeA = a.nome.toLowerCase();
+      const nomeB = b.nome.toLowerCase();
+
+      if (sortOrder === 'asc') {
+        return nomeA.localeCompare(nomeB);
+      } else {
+        return nomeB.localeCompare(nomeA);
+      }
+  });
 
   const columns = [
-    { key: 'nome', label: 'Nome' },
+    { key: 'nome', label: (
+        <div 
+          style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px' }}
+          onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+        >
+          NOME
+          <span style={{fontSize: '12px'}}>{sortOrder === 'asc' ? '⭡' : '⭣'}</span>
+        </div>)
+    },
     {
       key: 'acoes', label: '', width: 80,
-      render: (_, row) => (
-        <button className={`${pg.iconBtn} ${pg.iconBtnDanger}`} onClick={() => setDeleteTarget(row)} title="Excluir">🗑</button>
-      ),
+      render: (_, row) => {
+        const podeExcluir = (row.livros_count || 0) === 0;
+        return (
+          <button 
+          className={`${pg.iconBtn} ${pg.iconBtnDanger}`} 
+          onClick={() => setDeleteTarget(row)} 
+          title={podeExcluir ? "Excluir" : "Não é possível excluir categorias com livros vinculados"}
+          disabled={!podeExcluir}
+          style={{ opacity: podeExcluir ? 1 : 0.3, cursor: podeExcluir ? 'pointer' : 'not-allowed' }}>🗑</button>
+        );
+      },
     },
   ];
 
@@ -71,7 +98,7 @@ export function Categorias() {
       </div>
 
       <div className={pg.card} style={{ padding: 0 }}>
-        <Table columns={columns} data={filtered} loading={loading} emptyMessage="Nenhuma categoria encontrada." />
+        <Table columns={columns} data={filteredAndSorted} loading={loading} emptyMessage="Nenhuma categoria encontrada." />
       </div>
 
       <Modal

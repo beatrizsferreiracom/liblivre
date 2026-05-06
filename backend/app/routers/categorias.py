@@ -31,6 +31,13 @@ def excluir_categoria(categoria_id: int, db: Session = Depends(get_db)):
     if not categoria:
         raise HTTPException(status_code=404, detail="Categoria não encontrada.")
     
+    livros_vinculados = db.query(models.Livro).filter(models.Livro.categoria_id == categoria_id).first()
+    if livros_vinculados:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Não é possível excluir esta categoria pois existem livros vinculados a ela."
+        )
+
     try:
         db.delete(categoria)
         db.commit()
@@ -38,6 +45,6 @@ def excluir_categoria(categoria_id: int, db: Session = Depends(get_db)):
         db.rollback() 
         raise HTTPException(
             status_code=400, 
-            detail="Não é possível excluir esta categoria, pois ela possui histórico de empréstimos vinculados."
+            detail="Erro de integridade: Esta categoria possui dependências no sistema e não pode ser removida."
         )
     return

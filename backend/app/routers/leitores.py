@@ -117,13 +117,22 @@ def excluir_leitor(leitor_id: int, db: Session = Depends(get_db)):
     if not leitor:
         raise HTTPException(status_code=404, detail="Leitor não encontrado.")
     
+    emprestimo_vinculado = db.query(models.Emprestimo).filter(models.Emprestimo.leitor_id == leitor_id).first()
+    
+    if emprestimo_vinculado:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Não é possível excluir este leitor, pois ele possui histórico de empréstimos registrados."
+        )
+    
     try:
         db.delete(leitor)
         db.commit()
     except IntegrityError:
-        db.rollback() 
+        db.rollback()
         raise HTTPException(
-            status_code=400, 
-            detail="Não é possível excluir este leitor, pois ele possui histórico de empréstimos vinculados."
+            status_code=400,
+            detail="Erro de integridade: Existem dependências que impedem a exclusão deste leitor."
         )
+    
     return

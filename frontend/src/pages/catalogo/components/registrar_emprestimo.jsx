@@ -37,8 +37,9 @@ export function RegistrarEmprestimo({ book, onClose, onSuccess }) {
   const timerRef = useRef(null);
 
   useEffect(() => {
-    readersApi.getAll({ ativo: true })
-      .then((r) => setReaders(r.data))
+    readersApi.getAll({ ativo: true }).then((r) => {
+        const sortedReaders = r.data.sort((a, b) => a.nome.localeCompare(b.nome));
+        setReaders(sortedReaders); })
       .catch(() => {});
   }, []);
 

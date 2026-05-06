@@ -57,7 +57,7 @@ export function DetalhesLeitor({ reader, onClose, onEdit, onDeactivate, onActiva
             value={formatarData(reader.data_nascimento)} 
           />  
           <DetailRow label="Idade" value={idade} />
-          <DetailRow label="Telefone" value={reader.telefone} />
+          <DetailRow label="Telefone" value={reader.telefone || '—'} />
           <DetailRow label="Endereço" value={reader.endereco} />
           {reader.nome_resp && <DetailRow label="Nome do Responsável" value={reader.nome_resp} />}
           {reader.telefone_resp && <DetailRow label="Tel. Responsável" value={reader.telefone_resp} />}   

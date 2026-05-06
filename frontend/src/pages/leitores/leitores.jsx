@@ -23,6 +23,7 @@ export function Leitores() {
   const [deactivateTarget, setDeactivateTarget] = useState(null);
   const [activateTarget, setActivateTarget] = useState(null);
   const [acting, setActing] = useState(false);
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => { fetchReaders(); }, [showInactive]);
 
@@ -73,12 +74,31 @@ export function Leitores() {
     setDetailTarget(null);
   }
 
-  const filtered = readers.filter((r) =>
-    [r.nome, r.endereco].join(' ').toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredAndSorted = readers.filter((r) =>
+      [r.nome, r.endereco].join(' ').toLowerCase().includes(search.toLowerCase())
+    )
+    .sort((a, b) => {
+      const nomeA = a.nome.toLowerCase();
+      const nomeB = b.nome.toLowerCase();
+
+      if (sortOrder === 'asc') {
+        return nomeA.localeCompare(nomeB);
+      } else {
+        return nomeB.localeCompare(nomeA);
+      }
+  });
 
   const columns = [
-    { key: 'nome', label: 'Nome' },
+    { key: 'nome',
+      label: (
+        <div 
+          style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px' }}
+          onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+        >
+          NOME
+          <span>{sortOrder === 'asc' ? '⭡' : '⭣'}</span>
+        </div>)
+    },
     {
       key: 'is_ativo',
       label: 'Status',
@@ -130,7 +150,7 @@ export function Leitores() {
       <div className={pg.card} style={{ padding: 0 }}>
         <Table
           columns={columns}
-          data={filtered}
+          data={filteredAndSorted}
           loading={loading}
           emptyMessage="Nenhum leitor encontrado."
           onRowClick={(row) => setDetailTarget(row)}

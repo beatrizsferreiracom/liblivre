@@ -19,6 +19,10 @@ class Categoria(Base):
     
     livros = relationship("Livro", back_populates="categoria")
 
+    @property
+    def livros_count(self) -> int:
+        return len(self.livros)
+
 class Autor(Base):
     __tablename__ = "autores"
 
@@ -26,6 +30,10 @@ class Autor(Base):
     nome = Column(String(150), nullable=False)
     
     livros = relationship("Livro", back_populates="autor")
+
+    @property
+    def livros_count(self) -> int:
+        return len(self.livros)
 
 class Livro(Base):
     __tablename__ = "livros"
@@ -36,8 +44,8 @@ class Livro(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     titulo = Column(String(200), nullable=False)
-    autor_id = Column(Integer, ForeignKey("autores.id", ondelete="RESTRICT"))
-    categoria_id = Column(Integer, ForeignKey("categorias.id", ondelete="RESTRICT"))
+    autor_id = Column(Integer, ForeignKey("autores.id", ondelete="RESTRICT"), nullable=False)
+    categoria_id = Column(Integer, ForeignKey("categorias.id", ondelete="RESTRICT"), nullable=False)
     descricao = Column(Text, nullable=True)
     ano = Column(Integer, nullable=True)
     quantidade_total = Column(Integer, nullable=False)

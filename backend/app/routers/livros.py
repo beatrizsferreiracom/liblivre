@@ -68,6 +68,14 @@ def excluir_livro(livro_id: int, db: Session = Depends(get_db)):
     if not livro:
         raise HTTPException(status_code=404, detail="Livro não encontrado.")
     
+    emprestimo_vinculado = db.query(models.Emprestimo).filter(models.Emprestimo.livro_id == livro_id).first()
+    
+    if emprestimo_vinculado:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Não é possível excluir este livro, pois ele possui histórico de empréstimos vinculados."
+        )
+    
     try:
         db.delete(livro)
         db.commit()
@@ -75,6 +83,7 @@ def excluir_livro(livro_id: int, db: Session = Depends(get_db)):
         db.rollback() 
         raise HTTPException(
             status_code=400, 
-            detail="Não é possível excluir este livro, pois ele possui histórico de empréstimos vinculados."
+            detail="Erro de integridade: Não foi possível excluir o livro devido a dependências no banco de dados."
         )
+    
     return

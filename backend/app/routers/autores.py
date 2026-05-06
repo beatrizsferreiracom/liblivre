@@ -31,6 +31,13 @@ def excluir_autor(autor_id: int, db: Session = Depends(get_db)):
     if not autor:
         raise HTTPException(status_code=404, detail="Autor não encontrado.")
     
+    livros_vinculados = db.query(models.Livro).filter(models.Livro.autor_id == autor_id).first()
+    if livros_vinculados:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Não é possível excluir este autor pois existem livros vinculados a ele."
+        )
+    
     try:
         db.delete(autor)
         db.commit()

@@ -95,3 +95,45 @@
   background: var(--color-success) !important;
   border-color: var(--color-success) !important;
 }
+
+.calendarWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.calendarWrapper :global(.react-datepicker-wrapper) {
+  width: 100%;
+}
+
+.calendarWrapper :global(.react-datepicker__input-container) input {
+  padding-left: 36px;
+  cursor: pointer;
+}
+
+.calendarWrapper::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='%23666' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.calendarWrapper :global(.react-datepicker__close-icon) {
+  right: 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.calendarWrapper :global(.react-datepicker__close-icon::after) {
+  background-color: var(--color-text-muted);
+  font-size: 16px;
+}

@@ -11,8 +11,6 @@ export function RegistrarDevolucao({ loan, onClose, onSuccess }) {
   const [form, setForm] = useState({ data_devolucao_real: new Date().toISOString().split('T')[0] });
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
-
-  // Timer do botão confirmar
   const [countdown, setCountdown] = useState(null);
   const timerRef = useRef(null);
 
@@ -71,13 +69,6 @@ export function RegistrarDevolucao({ loan, onClose, onSuccess }) {
     onClose();
   }
 
-  const confirmLabel = () => {
-    if (saving) return 'Registrando...';
-    if (countdown === null) return 'Confirmar ⏱';
-    if (countdown > 0) return `Confirmar (${countdown}s)`;
-    return 'Confirmar ✓';
-  };
-
   return (
     <Modal
       isOpen={!!loan}
@@ -94,8 +85,15 @@ export function RegistrarDevolucao({ loan, onClose, onSuccess }) {
               onClick={handleConfirmClick}
               loading={saving}
               disabled={saving}
+              className={countdown === 0 ? styles.btnReady : ''}
             >
-              {confirmLabel()}
+              {saving 
+                ? 'Registrando...' 
+                : countdown === null 
+                  ? 'Confirmar ⏱' 
+                  : countdown > 0 
+                    ? `Confirmar (${countdown}s)` 
+                    : 'Confirmar ✓'}
             </Button>
           </div>
         </div>

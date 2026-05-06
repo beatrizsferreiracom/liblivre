@@ -20,6 +20,7 @@ export function Catalogo() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const [detailTarget, setDetailTarget] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: 'titulo', direction: 'asc' });
 
   useEffect(() => { fetchBooks(); }, []);
 
@@ -41,16 +42,34 @@ export function Catalogo() {
     } finally { setDeleting(false); }
   }
 
-  const filtered = useMemo(() =>
-    books.filter((b) =>
+  const sortedAndFiltered = useMemo(() => {
+
+    const result = books.filter((b) =>
       [b.titulo, b.autor?.nome, b.categoria?.nome].join(' ').toLowerCase().includes(search.toLowerCase())
-    ),
-    [books, search]
-  );
+    );
+
+    return result.sort((a, b) => {
+      let valA, valB;
+
+      if (sortConfig.key === 'titulo') {
+        valA = a.titulo.toLowerCase();
+        valB = b.titulo.toLowerCase();
+      } else if (sortConfig.key === 'autor') {
+        valA = (a.autor?.nome || "").toLowerCase();
+        valB = (b.autor?.nome || "").toLowerCase();
+      } else {
+        return 0;
+      }
+
+      if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [books, search, sortConfig]);
 
   const groupedByCategory = useMemo(() => {
     const map = {};
-    filtered.forEach((b) => {
+    sortedAndFiltered.forEach((b) => {
       const cat = b.categoria?.nome || 'Sem categoria';
       if (!map[cat]) map[cat] = [];
       map[cat].push(b);
@@ -61,11 +80,45 @@ export function Catalogo() {
     });
 
     return Object.keys(map).sort().map((cat) => ({ cat, books: map[cat] }));
-  }, [filtered]);
+  }, [sortedAndFiltered]);
   
   const columns = [
-    { key: 'titulo', label: 'Título' },
-    { key: 'autor', label: 'Autor', render: (v) => v?.nome || 'Desconhecido'},
+    { key: 'titulo', label: (
+      <div 
+        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', userSelect: 'none' }}
+        onClick={() => setSortConfig({ 
+          key: 'titulo', 
+          direction: sortConfig.key === 'titulo' && sortConfig.direction === 'asc' ? 'desc' : 'asc' 
+        })}
+      >
+        Título 
+        <span style={{ 
+          fontSize: '12px', 
+          color: sortConfig.key === 'titulo' ? 'var(--color-primary, #000)' : '#ccc',
+          transition: 'all 0.2s'
+        }}>
+          {sortConfig.key === 'titulo' && sortConfig.direction === 'desc' ? '⭣' : '⭡'}
+        </span>
+      </div>)
+    },
+    { key: 'autor', label: (
+      <div 
+        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', userSelect: 'none' }}
+        onClick={() => setSortConfig({ 
+          key: 'autor', 
+          direction: sortConfig.key === 'autor' && sortConfig.direction === 'asc' ? 'desc' : 'asc' 
+        })}
+      >
+        Autor
+        <span style={{ 
+          fontSize: '12px', 
+          color: sortConfig.key === 'autor' ? 'var(--color-primary, #000)' : '#ccc',
+          transition: 'all 0.2s'
+        }}>
+          {sortConfig.key === 'autor' && sortConfig.direction === 'desc' ? '⭣' : '⭡'}
+        </span>
+      </div>
+    ), render: (v) => v?.nome || 'Desconhecido'},
     { key: 'categoria', label: 'Categoria', render: (v) => v?.nome || 'Sem categoria'},
     {
       key: 'disponivel',
@@ -178,7 +231,7 @@ export function Catalogo() {
         <div className={pg.card} style={{ padding: 0 }}>
           <Table
             columns={columns}
-            data={filtered}
+            data={sortedAndFiltered}
             loading={loading}
             emptyMessage="Nenhum livro encontrado."
             onRowClick={(row) => navigate(`/catalogo/${row.id}`)} 
