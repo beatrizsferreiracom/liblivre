@@ -140,13 +140,13 @@ export function Catalogo() {
       width: 80,
       render: (_, row) => {
 
-        const podeExcluir = (row.quantidade_emprestada || 0) === 0;
+        const podeExcluir = (row.total_historico_emprestimos || 0) === 0;
 
         return (
         <div className={pg.actionIcons}>
           <button
             className={`${pg.iconBtn} ${pg.iconBtnDanger}`}
-            title={podeExcluir ? "Excluir" : "Não é possível excluir livros com empréstimos ativos"}
+            title={podeExcluir ? "Excluir" : "Não é possível excluir livros com empréstimos vinculados"}
             onClick={(e) => {e.stopPropagation(); setDeleteTarget(row);
           }}
             disabled={!podeExcluir}

@@ -24,7 +24,7 @@ export function AdicionarLivro({ isOpen, onClose, onSuccess }) {
     if(!file) return;
 
     if (file.size > 500 * 1024) {
-      setErros({ geral: "A imagem deve ter no máximo 500KB"});
+      setErrors({ geral: "A imagem deve ter no máximo 500KB"});
       return;
     }
 
@@ -67,6 +67,7 @@ export function AdicionarLivro({ isOpen, onClose, onSuccess }) {
   function handleClose() {
     setForm(EMPTY_FORM);
     setErrors({});
+    setPreview(null);
     onClose();
   }
 

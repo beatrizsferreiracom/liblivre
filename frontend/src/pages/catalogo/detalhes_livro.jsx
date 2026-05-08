@@ -43,7 +43,7 @@ export function DetalhesLivro() {
 
   const qtdDisponivel = (book.quantidade_total || 0) - (book.quantidade_emprestada || 0);
   const isDisponivel = qtdDisponivel > 0;
-  const podeExcluir = (book.quantidade_emprestada || 0) === 0;
+  const podeExcluir = (book.total_historico_emprestimos || 0) === 0;
 
   return (
     <div className={pg.page}>
@@ -62,7 +62,6 @@ export function DetalhesLivro() {
       </div>
       <div className={pg.card}>
         <div className={styles.detalhesSuperior}>
-          {/* Capa */}
           <div className={styles.capaWrapper}>
             {book.capa_url ? (
               <img src={book.capa_url} alt={book.titulo} className={styles.capaImg} />
@@ -87,10 +86,13 @@ export function DetalhesLivro() {
             <span className={pg.detailLabel}>Ano:</span>
             <span className={pg.detailValue}>{book.ano || '—'}</span>
           </div>
-          
           <div className={styles.footerItem}>
             <span className={pg.detailLabel}>Categoria:</span>
             <span className={pg.detailValue}>{book.categoria?.nome || '—'}</span>
+          </div>
+          <div className={styles.footerItem}>
+            <span className={pg.detailLabel}>Quantidade:</span>
+            <span className={pg.detailValue}>{book.quantidade_total}</span>
           </div>
           <div className={styles.footerItem}>
             <span className={pg.detailLabel}>Disponível:</span>

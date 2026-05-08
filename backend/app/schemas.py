@@ -84,6 +84,10 @@ class LivroResponse(LivroBase):
     autor: AutorResponse
     categoria: CategoriaResponse
 
+    quantidade_total: int
+    quantidade_emprestada: int
+    total_historico_emprestimos: int = 0
+
     model_config = ConfigDict(from_attributes=True)
 
 #Leitor

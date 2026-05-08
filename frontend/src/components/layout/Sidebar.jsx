@@ -3,11 +3,10 @@ import styles from './Sidebar.module.css';
 import logo from '../../assets/liblivre_logo.svg';
 
 const NAV_ITEMS = [
-  { to: '/catalogo',      label: 'Catálogo',      icon: '📚' },
-  { to: '/leitores',      label: 'Leitores',      icon: '👤' },
-  { to: '/autores',       label: 'Autores',        icon: '✏️' },
-  { to: '/categorias',    label: 'Categorias',     icon: '🏷️' },
-  { to: '/emprestimos',   label: 'Empréstimos',   icon: '🔄' },
+  { to: '/catalogo',      label: 'Catálogo' },
+  { to: '/leitores',      label: 'Leitores' },
+  { to: '/autores_categorias', label: 'Autores e Categorias' },
+  { to: '/emprestimos',   label: 'Empréstimos' },
 ];
 
 export function Sidebar() {

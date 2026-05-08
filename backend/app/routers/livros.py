@@ -35,6 +35,9 @@ def listar_livros(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 
     livros = db.query(models.Livro).filter(models.Livro.is_ativo == True).offset(skip).limit(limit).all()
 
+    for livro in livros:
+        livro.total_historico_emprestimos = len(livro.emprestimos)
+
     return livros
 
 @router.get("/{livro_id}", response_model=schemas.LivroResponse)
@@ -44,7 +47,9 @@ def buscar_livro(livro_id: int, db: Session = Depends(get_db)):
     
     if not livro:
         raise HTTPException(status_code=404, detail="Livro não encontrado.")
-        
+
+    livro.total_historico_emprestimos = len(livro.emprestimos)
+
     return livro
 
 @router.put("/{livro_id}", response_model=schemas.LivroResponse)

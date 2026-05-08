@@ -22,8 +22,7 @@ import Leitores from './pages/leitores/leitores';
 import Emprestimos from './pages/emprestimos/emprestimos';
 
 // Autores & Categorias
-import Autores from './pages/autores/autores';
-import Categorias from './pages/categorias/categorias';
+import AutoresCategorias from './pages/autores_categorias/autores_categorias';
 
 // Perfil
 import Perfil from './pages/perfil/perfil';
@@ -68,8 +67,7 @@ export default function App() {
           <Route path="/emprestimos" element={<Emprestimos />} />
 
           {/* Autores & Categorias */}
-          <Route path="/autores" element={<Autores />} />
-          <Route path="/categorias" element={<Categorias />} />
+          <Route path="/autores_categorias" element={<AutoresCategorias />} />
 
           {/* Perfil */}
           <Route path="/perfil" element={<Perfil />} />
