@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Date, ForeignKey, Text, CheckConstraint
+from sqlalchemy import Column, DateTime, Integer, String, Boolean, Date, ForeignKey, Text, CheckConstraint
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -10,6 +10,13 @@ class Usuario(Base):
     email = Column(String(150), unique=True, nullable=False, index=True)
     senha_hash = Column(String(255), nullable=False)
     nivel_acesso = Column(String(20), default="Bibliotecario")
+
+class CodigoRecuperacao(Base):
+    __tablename__ = "codigos_recuperacao"
+    id = Column(Integer, primary_key=True)
+    email = Column(String, index=True)
+    codigo = Column(String(6))
+    expiracao = Column(DateTime)
 
 class Categoria(Base):
     __tablename__ = "categorias"

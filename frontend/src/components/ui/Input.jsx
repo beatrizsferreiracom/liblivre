@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import styles from './Input.module.css';
 
 export function Input({
@@ -5,18 +7,46 @@ export function Input({
   error,
   hint,
   id,
+  type = 'text',
   className = '',
   ...props
 }) {
+  const [showPassword, setShowPassword] = useState(false);
   const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
+
+  // Determina se o campo é de senha e qual tipo mostrar
+  const isPassword = type === 'password';
+  const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
+
   return (
     <div className={[styles.wrapper, className].filter(Boolean).join(' ')}>
       {label && <label htmlFor={inputId} className={styles.label}>{label}</label>}
-      <input
-        id={inputId}
-        className={[styles.input, error ? styles.hasError : ''].filter(Boolean).join(' ')}
-        {...props}
-      />
+      
+      <div className={styles.inputContainer}>
+        <input
+          id={inputId}
+          type={inputType}
+          className={[
+            styles.input, 
+            error ? styles.hasError : '',
+            isPassword ? styles.inputPassword : ''
+          ].filter(Boolean).join(' ')}
+          {...props}
+        />
+        
+        {isPassword && (
+          <button
+            type="button"
+            className={styles.toggleButton}
+            onClick={() => setShowPassword(!showPassword)}
+            tabIndex="-1" // Evita que o Tab pare no ícone
+            title={showPassword ? "Esconder senha" : "Mostrar senha"}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        )}
+      </div>
+
       {error && <span className={styles.error}>{error}</span>}
       {hint && !error && <span className={styles.hint}>{hint}</span>}
     </div>

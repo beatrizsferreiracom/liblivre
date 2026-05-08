@@ -4,6 +4,7 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { authApi } from '../../services/api';
 import styles from './Auth.module.css';
+import logo from '../../assets/liblivre_logo.svg';
 
 export function NovaSenha() {
   const navigate = useNavigate();
@@ -46,8 +47,7 @@ export function NovaSenha() {
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.logo}>
-          <span className={styles.logoIcon}>📖</span>
-          <span className={styles.logoName}>LibLivre</span>
+          <img src={logo} alt="LibLivre" className={styles.logoIcon} />
         </div>
 
         <h1 className={styles.heading}>Nova senha</h1>

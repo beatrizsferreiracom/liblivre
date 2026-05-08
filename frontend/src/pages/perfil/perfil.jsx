@@ -4,8 +4,8 @@ import Button from '../../components/ui/Button';
 import { profileApi } from '../../services/api';
 import pg from '../../styles/page.module.css';
 
-export function ProfilePage() {
-  const [form, setForm] = useState({ nome_usuario: '', email: '', senha: '' });
+export function Perfil() {
+  const [form, setForm] = useState({ nome: '', email: '', senha: '' });
   const [fetching, setFetching] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
@@ -13,7 +13,12 @@ export function ProfilePage() {
 
   useEffect(() => {
     profileApi.get()
-      .then((r) => setForm({ nome_usuario: r.data.nome_usuario, email: r.data.email, senha: '' }))
+      .then((r) => setForm({ 
+        nome: r.data.nome, 
+        email: r.data.email, 
+        senha: '' 
+      }))
+      .catch(() => setError('Não foi possível carregar os dados do perfil.'))
       .finally(() => setFetching(false));
   }, []);
 
@@ -29,8 +34,13 @@ export function ProfilePage() {
     setLoading(true);
     setSuccess('');
     setError('');
+    if (form.senha && form.senha.length < 6) {
+      setError('A nova senha deve ter pelo menos 6 caracteres.');
+      setLoading(false);
+      return;
+    }
     try {
-      const payload = { nome_usuario: form.nome_usuario, email: form.email };
+      const payload = { nome: form.nome, email: form.email };
       if (form.senha) payload.senha = form.senha;
       await profileApi.update(payload);
       setSuccess('Perfil atualizado com sucesso!');
@@ -49,30 +59,11 @@ export function ProfilePage() {
       <div className={pg.pageHeader}>
         <div>
           <h1 className={pg.pageTitle}>Meu Perfil</h1>
-          <p className={pg.pageSubtitle}>Gerencie suas informações de acesso</p>
+          <p className={pg.pageSubtitle}>Gerencie suas informações de acesso ao LibLivre</p>
         </div>
       </div>
 
       <div className={pg.card}>
-        {/* Avatar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28 }}>
-          <div style={{
-            width: 56, height: 56, borderRadius: '50%',
-            background: 'var(--color-primary-light)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 22, fontWeight: 500, color: 'var(--color-primary)',
-            fontFamily: 'var(--font-display)',
-          }}>
-            {form.nome_usuario?.charAt(0).toUpperCase() || '?'}
-          </div>
-          <div>
-            <p style={{ fontWeight: 500, fontSize: 15 }}>{form.nome_usuario}</p>
-            <p style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>{form.email}</p>
-          </div>
-        </div>
-
-        <hr style={{ borderColor: 'var(--color-border)', marginBottom: 24 }} />
-
         {success && (
           <div style={{ marginBottom: 16, padding: '10px 14px', background: 'var(--color-success-light)', color: 'var(--color-success)', borderRadius: 'var(--radius-sm)', fontSize: 13 }}>
             {success}
@@ -83,13 +74,12 @@ export function ProfilePage() {
             {error}
           </div>
         )}
-
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <Input
-              label="Nome do usuário"
-              name="nome_usuario"
-              value={form.nome_usuario}
+              label="Nome"
+              name="nome"
+              value={form.nome}
               onChange={handleChange}
               required
             />
@@ -101,18 +91,18 @@ export function ProfilePage() {
               onChange={handleChange}
               required
             />
-            <Input
-              label="Nova Senha"
-              name="senha"
-              type="password"
-              value={form.senha}
-              onChange={handleChange}
-              placeholder="Deixe em branco para não alterar"
-              hint="Mínimo 6 caracteres"
-            />
+              <Input
+                label="Nova Senha"
+                name="senha"
+                type="password"
+                value={form.senha}
+                onChange={handleChange}
+                placeholder="Preencha apenas se desejar alterar"
+                hint="Mínimo 6 caracteres"
+              />
           </div>
-          <div className={pg.formActions}>
-            <Button type="submit" loading={loading}>Salvar Alterações</Button>
+          <div className={pg.formActions} style={{ marginTop: 24 }}>
+            <Button type="submit" loading={loading} style={{ width: '100%' }}>Salvar Alterações</Button>
           </div>
         </form>
       </div>
@@ -120,4 +110,4 @@ export function ProfilePage() {
   );
 }
 
-export default ProfilePage;
+export default Perfil;

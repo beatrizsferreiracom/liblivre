@@ -6,7 +6,7 @@ import './styles/globals.css'
 import AppLayout from './components/layout/AppLayout';
 
 // Autenticação
-import Login from './pages/autenticacao/Login';
+import Login from './pages/autenticacao/login';
 import RecuperarSenha from './pages/autenticacao/recuperar_senha';
 import VerificarCodigo from './pages/autenticacao/verificar_codigo';
 import NovaSenha from './pages/autenticacao/nova_senha';
@@ -75,8 +75,15 @@ export default function App() {
           <Route path="/perfil" element={<Perfil />} />
         </Route>
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/catalogo" replace />} />
+        {/* Fallback inteligente */}
+        <Route 
+          path="*" 
+          element={
+            localStorage.getItem('token') 
+              ? <Navigate to="/catalogo" replace /> 
+              : <Navigate to="/login" replace />
+          } 
+        />
       </Routes>
     </BrowserRouter>
   );

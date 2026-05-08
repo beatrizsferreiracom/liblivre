@@ -6,9 +6,9 @@ import { authApi } from '../../services/api';
 import styles from './Auth.module.css';
 import logo from '../../assets/liblivre_logo.svg';
 
-export function LoginPage() {
+export function Login() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ usuario: '', senha: '' });
+  const [form, setForm] = useState({ email: '', senha: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -22,17 +22,14 @@ export function LoginPage() {
     setLoading(true);
     
     try {
-      // Chamada real para a API que ainda não existe
-      // const res = await authApi.login(form);
-      
-      // Pausa falsa de 1 segundo para a animação de "loading" do botão
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      localStorage.setItem('token', 'token_falso_para_desenvolvimento_front');
-        
+      const res = await authApi.login(form);
+      const token = res.data.access_token;
+      localStorage.setItem('token', token);
       navigate('/catalogo');
     } catch (err) {
-      setError(err.message || 'Erro ao tentar entrar.');
+      console.error("Erro completo:", err);
+      const mensagemErro = err.response?.data?.detail || 'Erro ao conectar com o servidor.';
+      setError(mensagemErro);
     } finally {
       setLoading(false);
     }
@@ -52,11 +49,11 @@ export function LoginPage() {
 
         <form className={styles.form} onSubmit={handleSubmit}>
           <Input
-            label="Usuário"
-            name="usuario"
-            value={form.usuario}
+            label="E-mail"
+            name="email"
+            value={form.email}
             onChange={handleChange}
-            placeholder="Seu nome de usuário"
+            placeholder="Seu e-mail cadastrado"
             autoComplete="username"
             required
           />
@@ -86,4 +83,4 @@ export function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default Login;

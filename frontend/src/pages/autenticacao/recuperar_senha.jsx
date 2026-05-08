@@ -18,7 +18,7 @@ export function RecuperarSenha() {
     setLoading(true);
     try {
       await authApi.forgotPassword(email);
-      navigate('/recuperar-senha/codigo', { state: { email } });
+      navigate('/recuperar_senha/codigo', { state: { email } });
     } catch (err) {
       setError(err.response?.data?.detail || 'Não foi possível enviar o e-mail.');
     } finally {

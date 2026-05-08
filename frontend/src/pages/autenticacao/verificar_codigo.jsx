@@ -4,6 +4,7 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { authApi } from '../../services/api';
 import styles from './Auth.module.css';
+import logo from '../../assets/liblivre_logo.svg';
 
 export function VerificarCodigo() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export function VerificarCodigo() {
     setLoading(true);
     try {
       await authApi.verifyCode({ email, code });
-      navigate('/recuperar-senha/nova-senha', { state: { email, code } });
+      navigate('/recuperar_senha/nova_senha', { state: { email, code } });
     } catch (err) {
       setError(err.response?.data?.detail || 'Código inválido ou expirado.');
     } finally {
@@ -31,8 +32,7 @@ export function VerificarCodigo() {
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.logo}>
-          <span className={styles.logoIcon}>📖</span>
-          <span className={styles.logoName}>LibLivre</span>
+          <img src={logo} alt="LibLivre" className={styles.logoIcon} />
         </div>
 
         <h1 className={styles.heading}>Verificar código</h1>
@@ -57,7 +57,7 @@ export function VerificarCodigo() {
           </Button>
         </form>
 
-        <button className={styles.link} onClick={() => navigate('/recuperar-senha')}>
+        <button className={styles.link} onClick={() => navigate('/recuperar_senha')}>
           Reenviar código
         </button>
       </div>

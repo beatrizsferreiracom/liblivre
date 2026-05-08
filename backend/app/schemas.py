@@ -2,6 +2,41 @@ from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List
 from datetime import date
 
+# Usuário
+class UsuarioLogin(BaseModel):
+    email: str
+    senha: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class UsuarioResponse(BaseModel):
+    id: int
+    nome: str
+    email: str
+    nivel_acesso: str
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class UsuarioUpdate(BaseModel):
+    nome: str
+    email: str
+    senha: str | None = None
+
+# Recuperação de Senha
+class RecuperarSenha(BaseModel):
+    email: str
+
+class VerificarCodigo(BaseModel):
+    email: str
+    code: str
+
+class NovaSenha(BaseModel):
+    email: str
+    code: str
+    nova_senha: str
+
 # Categoria
 class CategoriaBase(BaseModel):
     nome: str

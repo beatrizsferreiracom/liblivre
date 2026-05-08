@@ -5,21 +5,20 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 })
 
-// Attach token to every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// Redirect to login on 401
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    const isAuthRoute = err.config?.url?.includes('/auth/');
+    if (err.response?.status === 401 && !isAuthRoute) {
       localStorage.removeItem('token');
       window.location.href = '/login';
-    }
+    }   
     return Promise.reject(err);
   }
 );
@@ -27,9 +26,9 @@ api.interceptors.response.use(
 // ─── Autenticação ───────────────────────────────────────────────
 export const authApi = {
   login: (data) => api.post('/auth/login', data),
-  forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
-  verifyCode: (data) => api.post('/auth/verify-code', data),
-  resetPassword: (data) => api.post('/auth/reset-password', data),
+  forgotPassword: (email) => api.post('/auth/recuperar_senha', { email }),
+  verifyCode: (data) => api.post('/auth/verificar_codigo', data),
+  resetPassword: (data) => api.post('/auth/nova_senha', data),
 };
 
 // ─── Livros ──────────────────────────────────────────────

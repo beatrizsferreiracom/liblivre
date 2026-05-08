@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from . import models
 from .database import engine
-from .routers import livros, categorias, autores, leitores, emprestimos
+from .routers import autenticacao, livros, categorias, autores, leitores, emprestimos, perfil
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -25,11 +25,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(autenticacao.router)
 app.include_router(livros.router)
 app.include_router(categorias.router)
 app.include_router(autores.router)
 app.include_router(leitores.router)
 app.include_router(emprestimos.router)
+app.include_router(perfil.router)
 
 @app.get("/")
 def read_root():
