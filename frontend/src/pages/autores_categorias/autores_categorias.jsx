@@ -74,12 +74,11 @@ function AutoresTab() {
         const podeExcluir = (row.livros_count || 0) === 0;
         return (
           <button
-            className={`${pg.iconBtn} ${pg.iconBtnDanger}`}
-            onClick={() => setDeleteTarget(row)}
+            className={`${pg.iconBtn} ${pg.iconBtnDanger} ${pg.btnIconDelete}`}
             title={podeExcluir ? 'Excluir' : 'Não é possível excluir autores com livros vinculados'}
             disabled={!podeExcluir}
-            style={{ opacity: podeExcluir ? 1 : 0.3, cursor: podeExcluir ? 'pointer' : 'not-allowed' }}
-          >🗑</button>
+            onClick={() => setDeleteTarget(row)}
+          />
         );
       },
     },
@@ -206,12 +205,11 @@ function CategoriasTab() {
         const podeExcluir = (row.livros_count || 0) === 0;
         return (
           <button
-            className={`${pg.iconBtn} ${pg.iconBtnDanger}`}
-            onClick={() => setDeleteTarget(row)}
+            className={`${pg.iconBtn} ${pg.iconBtnDanger} ${pg.btnIconDelete}`}
             title={podeExcluir ? 'Excluir' : 'Não é possível excluir categorias com livros vinculados'}
             disabled={!podeExcluir}
-            style={{ opacity: podeExcluir ? 1 : 0.3, cursor: podeExcluir ? 'pointer' : 'not-allowed' }}
-          >🗑</button>
+            onClick={() => setDeleteTarget(row)}
+          />
         );
       },
     },

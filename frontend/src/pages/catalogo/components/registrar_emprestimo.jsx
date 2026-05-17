@@ -89,7 +89,7 @@ export function RegistrarEmprestimo({ book, onClose, onSuccess }) {
     if (Object.keys(errs).length) { setErrors(errs); return; }
 
     if (countdown === null) {
-      setCountdown(5);
+      setCountdown(3);
       timerRef.current = setInterval(() => {
         setCountdown((c) => {
           if (c <= 1) {

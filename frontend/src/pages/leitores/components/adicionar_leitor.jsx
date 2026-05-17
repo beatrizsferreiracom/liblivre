@@ -6,7 +6,7 @@ import { readersApi } from '../../../services/api';
 
 const EMPTY_FORM = {
   nome: '', data_nascimento: '', telefone: '',
-  telefone_resp: '', nome_resp: '', endereco: '',
+  telefone_responsavel: '', nome_responsavel: '', endereco: '',
 };
 
 export function AdicionarLeitor({ isOpen, onClose, onSuccess }) {
@@ -28,6 +28,7 @@ export function AdicionarLeitor({ isOpen, onClose, onSuccess }) {
 
   function handleChange(e) {
     const { name, value } = e.target;
+    if (name === 'data_nascimento' && value.length > 10) return;
     setForm((f) => ({ ...f, [name]: value }));
     setErrors((er) => ({ ...er, [name]: '' }));
   }
@@ -38,8 +39,8 @@ export function AdicionarLeitor({ isOpen, onClose, onSuccess }) {
     if (!form.data_nascimento.trim()) errs.data_nascimento = 'Obrigatório';
     if (!form.endereco.trim()) errs.endereco = 'Obrigatório';
     if (isMenorDe12) {
-      if (!form.nome_resp.trim()) errs.nome_resp = 'Obrigatório para menores de 12 anos';
-      if (!form.telefone_resp.trim()) errs.telefone_resp = 'Obrigatório para menores de 12 anos';
+      if (!form.nome_responsavel.trim()) errs.nome_responsavel = 'Obrigatório para menores de 12 anos';
+      if (!form.telefone_responsavel.trim()) errs.telefone_responsavel = 'Obrigatório para menores de 12 anos';
     }
     return errs;
   }

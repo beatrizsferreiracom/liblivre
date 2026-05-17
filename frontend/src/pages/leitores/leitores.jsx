@@ -104,7 +104,7 @@ export function Leitores() {
       label: 'Status',
       width: 100,
       render: (v) => (
-        <Badge variant={v ? 'success' : 'default'}>{v ? 'Ativo' : 'Inativo'}</Badge>
+        <Badge variant={v ? 'success' : 'warning'}>{v ? 'Ativo' : 'Inativo'}</Badge>
       ),
     },
     {
@@ -113,11 +113,26 @@ export function Leitores() {
       width: 120,
       render: (_, row) => (
         <div className={pg.actionIcons}>
-          {row.is_ativo && (<button className={pg.iconBtn} title="Editar" onClick={(e) => {e.stopPropagation(); setEditTarget(row)}}>✏️</button>)}
-          {row.is_ativo
-            ? <button className={`${pg.iconBtn} ${pg.iconBtnDanger}`} title="Desativar" onClick={(e) => {e.stopPropagation(); setDeactivateTarget(row)}}>🚫</button>
-            : <button className={pg.iconBtn} title="Ativar" style={{ color: 'var(--color-success)' }} onClick={(e) => {e.stopPropagation(); setActivateTarget(row)}}>✅</button>
-          }
+          {row.is_ativo && (
+            <button 
+              className={`${pg.iconBtn} ${pg.btnIconEdit}`} 
+              title="Editar" 
+              onClick={(e) => { e.stopPropagation(); setEditTarget(row); }} 
+            />
+          )}
+          {row.is_ativo ? (
+            <button 
+              className={`${pg.iconBtn} ${pg.btnIconDeactivate}`} 
+              title="Desativar" 
+              onClick={(e) => { e.stopPropagation(); setDeactivateTarget(row); }} 
+            />
+          ) : (
+            <button 
+              className={`${pg.iconBtn} ${pg.btnIconActivate}`} 
+              title="Ativar" 
+              onClick={(e) => { e.stopPropagation(); setActivateTarget(row); }} 
+            />
+          )}
         </div>
       ),
     },

@@ -145,13 +145,11 @@ export function Catalogo() {
         return (
         <div className={pg.actionIcons}>
           <button
-            className={`${pg.iconBtn} ${pg.iconBtnDanger}`}
+            className={`${pg.iconBtn} ${pg.iconBtnDanger} ${pg.btnIconDelete}`}
             title={podeExcluir ? "Excluir" : "Não é possível excluir livros com empréstimos vinculados"}
-            onClick={(e) => {e.stopPropagation(); setDeleteTarget(row);
-          }}
             disabled={!podeExcluir}
-            style={{ opacity: podeExcluir ? 1 : 0.3, cursor: podeExcluir ? 'pointer' : 'not-allowed' }}
-          >🗑</button>
+            onClick={(e) => { e.stopPropagation(); setDeleteTarget(row); }}
+          />
         </div> );
       },
     },

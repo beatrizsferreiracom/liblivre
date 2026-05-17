@@ -14,7 +14,6 @@ export function Input({
   const [showPassword, setShowPassword] = useState(false);
   const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
-  // Determina se o campo é de senha e qual tipo mostrar
   const isPassword = type === 'password';
   const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
 
@@ -39,7 +38,7 @@ export function Input({
             type="button"
             className={styles.toggleButton}
             onClick={() => setShowPassword(!showPassword)}
-            tabIndex="-1" // Evita que o Tab pare no ícone
+            tabIndex="-1"
             title={showPassword ? "Esconder senha" : "Mostrar senha"}
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}

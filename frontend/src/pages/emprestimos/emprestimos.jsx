@@ -132,10 +132,10 @@ export function Emprestimos() {
       width: 80,
       render: (_, row) => (
         <button
-          className={pg.iconBtn}
+          className={`${pg.iconBtn} ${pg.btnIconReturn}`}
           title="Registrar devolução"
           onClick={() => setDevolucaoTarget(row)}
-        >↩</button>
+        />
       ),
     },
   ];

@@ -2,6 +2,9 @@ import Input from '../../../components/ui/Input';
 import pg from '../../../styles/page.module.css';
 
 export function FormLeitor({ form, errors, onChange, idade, isMenorDe12 }) {
+
+  const hoje = new Date().toISOString().split('T')[0];
+  
   return (
     <div className={pg.formGrid}>
       <Input
@@ -43,17 +46,17 @@ export function FormLeitor({ form, errors, onChange, idade, isMenorDe12 }) {
         <>
           <Input
             label="Nome do Responsável"
-            name="nome_resp"
-            value={form.nome_resp}
+            name="nome_responsavel"
+            value={form.nome_responsavel}
             onChange={onChange}
-            error={errors.nome_resp}
+            error={errors.nome_responsavel}
           />
           <Input
             label="Telefone do Responsável"
-            name="telefone_resp"
-            value={form.telefone_resp}
+            name="telefone_responsavel"
+            value={form.telefone_responsavel}
             onChange={onChange}
-            error={errors.telefone_resp}
+            error={errors.telefone_responsavel}
           />
         </>
       )}

@@ -13,7 +13,7 @@ function DetailRow({ label, value }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <span style={{
-        fontSize: 11, fontWeight: 500, textTransform: 'uppercase',
+        fontSize: 14, fontWeight: 500, textTransform: 'uppercase',
         letterSpacing: '0.04em', color: 'var(--color-text-muted)',
       }}>
         {label}
@@ -59,8 +59,8 @@ export function DetalhesLeitor({ reader, onClose, onEdit, onDeactivate, onActiva
           <DetailRow label="Idade" value={idade} />
           <DetailRow label="Telefone" value={reader.telefone || '—'} />
           <DetailRow label="Endereço" value={reader.endereco} />
-          {reader.nome_resp && <DetailRow label="Nome do Responsável" value={reader.nome_resp} />}
-          {reader.telefone_resp && <DetailRow label="Tel. Responsável" value={reader.telefone_resp} />}   
+          {reader.nome_responsavel && <DetailRow label="Nome do Responsável" value={reader.nome_responsavel} />}
+          {reader.telefone_responsavel && <DetailRow label="Tel. Responsável" value={reader.telefone_responsavel} />}   
           <DetailRow
             label="Status"
             value={

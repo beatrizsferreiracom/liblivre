@@ -31,7 +31,7 @@ export function RegistrarDevolucao({ loan, onClose, onSuccess }) {
 
   function handleConfirmClick() {
     if (countdown === null) {
-      setCountdown(5);
+      setCountdown(3);
       timerRef.current = setInterval(() => {
         setCountdown((c) => {
           if (c <= 1) {

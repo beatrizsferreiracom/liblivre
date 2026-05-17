@@ -7,7 +7,7 @@ import { Form } from 'lucide-react';
 
 const EMPTY_FORM = {
   nome: '', data_nascimento: '', telefone: '',
-  telefone_resp: '', nome_resp: '', endereco: '',
+  telefone_responsavel: '', nome_responsavel: '', endereco: '',
 };
 
 export function EditarLeitor({ reader, onClose, onSuccess }) {
@@ -16,13 +16,13 @@ export function EditarLeitor({ reader, onClose, onSuccess }) {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (reader) {
+    if (reader && reader.id) {
       setForm({
         nome: reader.nome || '',
         data_nascimento: reader.data_nascimento || '',
         telefone: reader.telefone || '',
-        telefone_resp: reader.telefone_resp || '',
-        nome_resp: reader.nome_resp || '',
+        telefone_responsavel: reader.telefone_responsavel || '',
+        nome_responsavel: reader.nome_responsavel || '',
         endereco: reader.endereco || '',
       });
       setErrors({});
@@ -53,8 +53,8 @@ export function EditarLeitor({ reader, onClose, onSuccess }) {
     if (!form.data_nascimento.trim()) errs.data_nascimento = 'Obrigatório';
     if (!form.endereco.trim()) errs.endereco = 'Obrigatório';
     if (isMenorDe12) {
-      if (!form.nome_resp.trim()) errs.nome_resp = 'Obrigatório para menores de 12';
-      if (!form.telefone_resp.trim()) errs.telefone_resp = 'Obrigatório para menores de 12';
+      if (!form.nome_responsavel.trim()) errs.nome_responsavel = 'Obrigatório para menores de 12';
+      if (!form.telefone_responsavel.trim()) errs.telefone_responsavel = 'Obrigatório para menores de 12';
     }
     return errs;
   }
