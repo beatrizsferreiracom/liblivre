@@ -20,7 +20,9 @@ export function Sidebar() {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
-        <img src={logo} alt="LibLivre" className={styles.logoIcon} />
+        <NavLink to="/catalogo">
+          <img src={logo} alt="LibLivre" className={styles.logoIcon} />
+        </NavLink>
       </div>
 
       <nav className={styles.nav}>

@@ -252,7 +252,7 @@ function CategoriasTab() {
           label="Nome da categoria"
           value={nome}
           onChange={(e) => { setNome(e.target.value); setAddError(''); }}
-          placeholder="Ex: Romance, Ficção Científica..."
+          placeholder="Ex: Clássicos"
           autoFocus
         />
       </Modal>

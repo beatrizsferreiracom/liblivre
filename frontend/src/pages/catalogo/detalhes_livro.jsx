@@ -95,12 +95,9 @@ export function DetalhesLivro() {
             <span className={pg.detailValue}>{book.quantidade_total}</span>
           </div>
           <div className={styles.footerItem}>
-            <span className={pg.detailLabel}>Disponível:</span>
-            <span className={pg.detailValue}>{qtdDisponivel}</span>
-          </div>
-          <div className={styles.footerItem}>
+            <span className={pg.detailLabel}>Status:</span>
             <Badge variant={isDisponivel ? 'success' : 'danger'}>
-              {isDisponivel ? 'Disponível' : 'Indisponível'}
+              {isDisponivel ? `Disponível (${qtdDisponivel})` : 'Indisponível'}
             </Badge>
           </div>
         </div>
